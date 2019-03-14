@@ -152,7 +152,7 @@ cwd = os.getcwd()
 dictFileName = 'dict.json'
 localDictPath = cwd + '/' + dictFileName
 # /usr/bin/bash 路径
-bashDir = '/usr/bin/testdeng'
+bashDir = '/usr/bin/d'
 # /usr/bin/bash content
 bashContent = 'save_path=$PWD\n'+'cd '+cwd+'\n'+'python3 dict.py $*\n'+'cd $save_path'
 curFileName = 'dict.py'
