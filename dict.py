@@ -114,12 +114,20 @@ def createBashFile(bashDir,bashContent):
 # 输入：（本地纯英文词汇表，离线词典路径）
 def createOfflineDict(pureEngWordsPath,localDictPath):
     localDictLib = []
+    localDictLib2 = openDictFile(localDictPath)
     with open(pureEngWordsPath,'r') as f:
         while True:
             data = f.readline()
-            translationItem = downloadWordTranslation(data)
+            data = data.strip()
+            localTranslationItem = checkLocalWords(localDictLib2,data)
+            if localTranslationItem:
+                # printLookupResult(localTranslationItem)
+                continue
+            else:
+                translationItem = downloadWordTranslation(data)
             if translationItem['word'] == '':
                 print('网络词典本地化完成！')
+                localDictLib.extend(localDictLib2)
                 break
             printLookupResult(translationItem)
             localDictLib.append(translationItem)
@@ -144,10 +152,9 @@ cwd = os.getcwd()
 dictFileName = 'dict.json'
 localDictPath = cwd + '/' + dictFileName
 # /usr/bin/bash 路径
-bashDir = '/usr/bin/d'
+bashDir = '/usr/bin/testdeng'
 # /usr/bin/bash content
 bashContent = 'save_path=$PWD\n'+'cd '+cwd+'\n'+'python3 dict.py $*\n'+'cd $save_path'
-pureEngWordsPath = cwd + '/' + 'pureEngWords'
 curFileName = 'dict.py'
 curFilePath = cwd + '/' + curFileName
 
@@ -166,8 +173,11 @@ if scriptExecutedSignal:
         with open('dict.json','w') as f:
             json.dump(localDictLib,f)  
 else:
+    userinput = input('请输入需要添加到本地词典的纯英文词汇列表文件名，如不需要请按回车继续：')
+    pureEngWordsPath = cwd + '/' + userinput
+    if userinput != '':
+        createOfflineDict(pureEngWordsPath,localDictPath)
     createBashFile(bashDir,bashContent)
-    createOfflineDict(pureEngWordsPath,localDictPath)
     changeCurrentFileContent(curFilePath)
             
 
