@@ -135,11 +135,11 @@ def createOfflineDict(pureEngWordsPath,localDictPath):
 def changeCurrentFileContent(curFilePath):
     with open(curFilePath,'r') as f:
         currentFileContent = f.read()
-    currentFileContent = currentFileContent.replace('scriptExecutedSignal = True','scriptExecutedSignal = True',2)
+    currentFileContent = currentFileContent.replace('scriptExecutedSignal = False','scriptExecutedSignal = True',2)
     with open(curFilePath,'w') as f:
         f.write(currentFileContent)
 
-scriptExecutedSignal = True
+scriptExecutedSignal = False
 cwd = os.getcwd()
 dictFileName = 'dict.json'
 localDictPath = cwd + '/' + dictFileName
