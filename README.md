@@ -5,3 +5,4 @@
   sudo python3 dict.py<br />
   根据提示选择是否补充本地词库，<br />
 使用：<br />
+<code>$ d 词汇或词组</code>
