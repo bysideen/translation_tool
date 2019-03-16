@@ -1,8 +1,8 @@
 import requests
-from lxml import html
 import argparse
 import json
 import os
+from bs4 import BeautifulSoup
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@ function 目录 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # getUserInput
@@ -52,33 +52,38 @@ def checkLocalWords(localDictLib,userInput):
 # 输入：词语条目
 # 返回：该词语相关的翻译内容（字典）
 def downloadWordTranslation(userInput):
+    ####################################################
     link = "https://www.youdao.com/w/"+userInput+"/#keyfrom=dict2.top"
     response = requests.get(link) #get page data from server, block redirects
     sourceCode = response.content #get string of source code from response
-    htmlElem = html.document_fromstring(sourceCode) #make HTML element object
-    #用xpath取出网页内容
-    wordTranslation = htmlElem.xpath("//div[@id='phrsListTab']/div[@class='trans-container']/ul/li/text()")
-    internetTranslation = htmlElem.xpath("//div[@id='tWebTrans']/div[@class='wt-container']/div[@class='title']/span/text()")
-    possibleWords = htmlElem.xpath("//div[@class='error-typo']/p/span/a/text()")
-    pronounce = htmlElem.xpath("//span[@class='pronounce']/span/text()")
+    
+    #用beautiful soup中的css选择器方法爬取数据
+    soup = BeautifulSoup(sourceCode,'lxml')
+    #-以下爬取条目均为标签格式的列表
+    wordTranslation = soup.select('#phrsListTab li')
+    internetTranslation = soup.select('#tWebTrans .wt-container .title>span')
+    possibleWords = soup.select('.typo-rel')
+    pronounce = soup.select('.pronounce .phonetic')
     #清楚多余空格
-    if internetTranslation:
-        for i in range(len(internetTranslation)):
-            internetTranslation[i] = internetTranslation[i].strip() 
-            if internetTranslation[i] == '':
-                index =  i  
-        try:           
-            internetTranslation.remove(internetTranslation[index])
-        except:
-            pass
+
     word = {
         'word': userInput.strip(),
-        'pronounce':pronounce,
-        'wordTranslation':wordTranslation,
-        'internetTranslation': internetTranslation,
-        'possibleWords': possibleWords
+        'pronounce':getTextsFromTags(pronounce),
+        'wordTranslation':getTextsFromTags(wordTranslation),
+        'internetTranslation': getTextsFromTags(internetTranslation),
+        'possibleWords': getTextsFromTags(possibleWords)
     }
     return word
+# 功能：将标签类型列表转换成字符串类型列表
+# 输入：标签列表
+# 输出：字符串列表
+def getTextsFromTags(tagObjList):
+    textsList = []
+    for each in tagObjList:
+        text = each.get_text().strip().replace('\n','')
+        textsList.append(text)
+    return textsList
+
 # 功能：打印出用户查询词汇的相关翻译内容
 # 输入：翻译内容（字典）
 def printLookupResult(wordDict):
@@ -147,12 +152,13 @@ def changeCurrentFileContent(curFilePath):
     with open(curFilePath,'w') as f:
         f.write(currentFileContent)
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 主程序 main @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 scriptExecutedSignal = False
 cwd = os.getcwd()
 dictFileName = 'dict.json'
 localDictPath = cwd + '/' + dictFileName
 # /usr/bin/bash 路径
-bashDir = '/usr/bin/testdeng'
+bashDir = '/usr/bin/d'
 # /usr/bin/bash content
 bashContent = 'save_path=$PWD\n'+'cd '+cwd+'\n'+'python3 dict.py $*\n'+'cd $save_path'
 curFileName = 'dict.py'
@@ -174,8 +180,9 @@ if scriptExecutedSignal:
             json.dump(localDictLib,f)  
 else:
     userinput = input('请输入需要添加到本地词典的纯英文词汇列表文件名，如不需要请按回车继续：')
-    pureEngWordsPath = cwd + '/' + userinput
+
     if userinput != '':
+        pureEngWordsPath = cwd + '/' + userinput
         createOfflineDict(pureEngWordsPath,localDictPath)
     createBashFile(bashDir,bashContent)
     changeCurrentFileContent(curFilePath)
