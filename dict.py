@@ -4,9 +4,8 @@ import json
 import os
 from bs4 import BeautifulSoup
 
-#改变系统环境变量all_proxy的值————当系统使用socks协议的代理时，需要将系统所设代理的socks改为socks5，否则会报出无法识别socks版本的错误
-if os.environ['all_proxy'].find('socks5')==-1:
-    os.environ['all_proxy'] = os.environ['all_proxy'].replace('socks','socks5')
+# 禁用IP代理
+os.environ['no_proxy'] = '*' 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@ function 目录 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # getUserInput
 # openDictFile
