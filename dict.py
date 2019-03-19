@@ -95,9 +95,9 @@ def printLookupResult(wordDict):
     if word['pronounce']:
         print("%s发音:%s" % ('\033[95m','\033[0m'))
         try:
-            print("英音:%s%s%s     美音:%s%s%s" % ('\033[96m',word['pronounce'][0],'\033[0m','\033[96m',word['pronounce'][1],'\033[0m'))
+            print("英:%s%s%s     美:%s%s%s" % ('\033[96m',word['pronounce'][0],'\033[0m','\033[96m',word['pronounce'][1],'\033[0m'))
         except:
-            print("英音:%s%s%s     美音:%s%s%s" % ('\033[96m',word['pronounce'][0],'\033[0m','\033[96m',word['pronounce'][0],'\033[0m'))
+            print("英:%s%s%s     美:%s%s%s" % ('\033[96m',word['pronounce'][0],'\033[0m','\033[96m',word['pronounce'][0],'\033[0m'))
     if word['wordTranslation']:
         print("%s翻  译:%s" % ('\033[95m','\033[0m'))
         for each in word['wordTranslation']:
@@ -110,7 +110,7 @@ def printLookupResult(wordDict):
         print("%s您要找的是不是:%s" % ('\033[95m','\033[0m'))
         for each in word['possibleWords']:
             print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))   
-    if word['longPhraseTrans']:
+    if 'longPhraseTrans' in word:
         print("%s长句翻译：%s" % ('\033[95m','\033[0m'))
         for each in word['longPhraseTrans']:
             print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))           
