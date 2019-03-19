@@ -66,14 +66,15 @@ def downloadWordTranslation(userInput):
     internetTranslation = soup.select('#tWebTrans .wt-container .title>span')
     possibleWords = soup.select('.typo-rel')
     pronounce = soup.select('.pronounce .phonetic')
+    longPhraseTrans = soup.select('#fanyiToggle p:nth-child(2)')
     #清楚多余空格
-
     word = {
         'word': userInput.strip(),
         'pronounce':getTextsFromTags(pronounce),
         'wordTranslation':getTextsFromTags(wordTranslation),
         'internetTranslation': getTextsFromTags(internetTranslation),
-        'possibleWords': getTextsFromTags(possibleWords)
+        'possibleWords': getTextsFromTags(possibleWords),
+        'longPhraseTrans':getTextsFromTags(longPhraseTrans)
     }
     return word
 # 功能：将标签类型列表转换成字符串类型列表
@@ -109,6 +110,11 @@ def printLookupResult(wordDict):
         print("%s您要找的是不是:%s" % ('\033[95m','\033[0m'))
         for each in word['possibleWords']:
             print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))   
+    if word['longPhraseTrans']:
+        print("%s长句翻译：%s" % ('\033[95m','\033[0m'))
+        for each in word['longPhraseTrans']:
+            print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))           
+
 
 # 功能：创建bash文件，用于在命令行直接唤出程序
 # 输入：(bash文件路径，bash文件内容)
