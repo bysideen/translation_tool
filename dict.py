@@ -67,6 +67,8 @@ def downloadWordTranslation(userInput):
     possibleWords = soup.select('.typo-rel')
     pronounce = soup.select('.pronounce .phonetic')
     longPhraseTrans = soup.select('#fanyiToggle p:nth-child(2)')
+    wordTranslation_ch_to_en = soup.select('#results-contents #phrsListTab .wordGroup')
+    internetShortPhrase = soup.select('#webTransToggle .wordGroup')
     #清楚多余空格
     word = {
         'word': userInput.strip(),
@@ -74,7 +76,9 @@ def downloadWordTranslation(userInput):
         'wordTranslation':getTextsFromTags(wordTranslation),
         'internetTranslation': getTextsFromTags(internetTranslation),
         'possibleWords': getTextsFromTags(possibleWords),
-        'longPhraseTrans':getTextsFromTags(longPhraseTrans)
+        'longPhraseTrans':getTextsFromTags(longPhraseTrans),
+        'wordTranslation_ch_to_en': getTextsFromTags(wordTranslation_ch_to_en),
+        'internetShortPhrase':getTextsFromTags(internetShortPhrase)
     }
     return word
 # 功能：将标签类型列表转换成字符串类型列表
@@ -83,9 +87,10 @@ def downloadWordTranslation(userInput):
 def getTextsFromTags(tagObjList):
     textsList = []
     for each in tagObjList:
-        text = each.get_text().strip().replace('\n','')
+        text = each.get_text().strip().replace('\n','').replace('   ','')
         textsList.append(text)
     return textsList
+    
 
 # 功能：打印出用户查询词汇的相关翻译内容
 # 输入：翻译内容（字典）
@@ -111,9 +116,27 @@ def printLookupResult(wordDict):
         for each in word['possibleWords']:
             print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))   
     if 'longPhraseTrans' in word:
-        print("%s长句翻译：%s" % ('\033[95m','\033[0m'))
-        for each in word['longPhraseTrans']:
-            print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))           
+        if word['longPhraseTrans']:
+            print("%s长句翻译：%s" % ('\033[95m','\033[0m'))
+            for each in word['longPhraseTrans']:
+                print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))
+    if 'wordTranslation_ch_to_en' in word:
+        if word['wordTranslation_ch_to_en']:
+            print("%s翻译(汉译英)：%s" % ('\033[95m','\033[0m'))
+            for each in word['wordTranslation_ch_to_en']:
+                print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))
+    if 'internetShortPhrase' in word:
+        if word['internetShortPhrase']:
+            print("%s网络短语：%s" % ('\033[95m','\033[0m'))
+            stopPoint = 1
+            for each in word['internetShortPhrase']:
+                print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))
+                stopPoint += 1
+                if stopPoint>3:
+                    break
+
+
+
 
 
 # 功能：创建bash文件，用于在命令行直接唤出程序
