@@ -125,15 +125,16 @@ def printLookupResult(wordDict):
             print("%s翻译(汉译英)：%s" % ('\033[95m','\033[0m'))
             for each in word['wordTranslation_ch_to_en']:
                 print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))
-    if 'internetShortPhrase' in word:
-        if word['internetShortPhrase']:
-            print("%s网络短语：%s" % ('\033[95m','\033[0m'))
-            stopPoint = 1
-            for each in word['internetShortPhrase']:
-                print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))
-                stopPoint += 1
-                if stopPoint>3:
-                    break
+    #以下代码用于显示：【网络短语】 的条目，由于显示内容过多，所以注释掉这一条
+    # if 'internetShortPhrase' in word:
+    #     if word['internetShortPhrase']:
+    #         print("%s网络短语：%s" % ('\033[95m','\033[0m'))
+    #         stopPoint = 1
+    #         for each in word['internetShortPhrase']:
+    #             print('========= %s%s%s' % ('\033[93m',each,'\033[0m'))
+    #             stopPoint += 1
+    #             if stopPoint>3:
+    #                 break
 
 
 
