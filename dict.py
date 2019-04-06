@@ -6,7 +6,7 @@ scriptExecutedSignal = True
 os.environ['no_proxy'] = '*' 
 if not scriptExecutedSignal:
     os.system('apt install python3-pip')
-    os.system('pip3 install requests argparse  bs4')
+    os.system('pip3 install requests argparse  bs4 lxml')
 
 import requests
 import argparse
