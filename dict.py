@@ -1,11 +1,21 @@
-import requests
-import argparse
-import json
 import os
-from bs4 import BeautifulSoup
+scriptExecutedSignal = True
+
 
 # 禁用IP代理
 os.environ['no_proxy'] = '*' 
+if not scriptExecutedSignal:
+    os.system('apt install python3-pip')
+    os.system('pip3 install requests argparse  bs4')
+
+import requests
+import argparse
+import json
+from bs4 import BeautifulSoup
+
+
+
+
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@ function 目录 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # getUserInput
 # openDictFile
@@ -185,7 +195,6 @@ def changeCurrentFileContent(curFilePath):
         f.write(currentFileContent)
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 主程序 main @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-scriptExecutedSignal = True
 cwd = os.getcwd()
 dictFileName = 'dict.json'
 localDictPath = cwd + '/' + dictFileName
