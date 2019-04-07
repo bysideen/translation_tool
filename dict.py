@@ -6,8 +6,8 @@ scriptExecutedSignal = False
 os.environ['no_proxy'] = '*' 
 if not scriptExecutedSignal:
     print('正在安装依赖包:requests、argparse、bs4、lxml......')
-    os.system('apt install python3-pip > /dev/null')
-    os.system('pip3 install requests argparse  bs4 lxml > /dev/null')
+    os.system('sudo apt-get install python3-pip > /dev/null')
+    os.system('sudo -H pip3 install requests argparse  bs4 lxml > /dev/null')
 
 import requests
 import argparse
