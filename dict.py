@@ -1,12 +1,13 @@
 import os
-scriptExecutedSignal = True
+scriptExecutedSignal = False
 
 
 # 禁用IP代理
 os.environ['no_proxy'] = '*' 
 if not scriptExecutedSignal:
-    os.system('apt install python3-pip')
-    os.system('pip3 install requests argparse  bs4 lxml')
+    print('正在安装依赖包:requests\argparse\bs4\lxml......')
+    os.system('apt install python3-pip > /dev/null')
+    os.system('pip3 install requests argparse  bs4 lxml > /dev/null')
 
 import requests
 import argparse
@@ -190,7 +191,7 @@ def createOfflineDict(pureEngWordsPath,localDictPath):
 def changeCurrentFileContent(curFilePath):
     with open(curFilePath,'r') as f:
         currentFileContent = f.read()
-    currentFileContent = currentFileContent.replace('scriptExecutedSignal = True','scriptExecutedSignal = True',2)
+    currentFileContent = currentFileContent.replace('scriptExecutedSignal = False','scriptExecutedSignal = True',2)
     with open(curFilePath,'w') as f:
         f.write(currentFileContent)
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 主程序 main @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
