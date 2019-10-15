@@ -1,5 +1,5 @@
 import os
-scriptExecutedSignal = False
+scriptExecutedSignal = True
 
 
 # 禁用IP代理
@@ -66,7 +66,7 @@ def checkLocalWords(localDictLib,userInput):
 # 返回：该词语相关的翻译内容（字典）
 def downloadWordTranslation(userInput):
     ####################################################
-    link = "https://www.youdao.com/w/"+userInput+"/#keyfrom=dict2.top"
+    link = "https://www.youdao.com/w/"+userInput
     response = requests.get(link) #get page data from server, block redirects
     sourceCode = response.content #get string of source code from response
     
@@ -191,7 +191,7 @@ def createOfflineDict(pureEngWordsPath,localDictPath):
 def changeCurrentFileContent(curFilePath):
     with open(curFilePath,'r') as f:
         currentFileContent = f.read()
-    currentFileContent = currentFileContent.replace('scriptExecutedSignal = False','scriptExecutedSignal = True',2)
+    currentFileContent = currentFileContent.replace('scriptExecutedSignal = True','scriptExecutedSignal = True',2)
     with open(curFilePath,'w') as f:
         f.write(currentFileContent)
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 主程序 main @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
